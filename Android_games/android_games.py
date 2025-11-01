@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 games = pd.read_csv("android-games.csv")
 
@@ -35,7 +37,7 @@ highest_installed = games.sort_values(by='installs',ascending=False)
 
 # RANKING THE GAME CATEGORIES BY HOW MANY INSTALLS THEY HAVE
 
-highest_install_by_cat = games.groupby('category')['installs'].sum().sort_values(ascending=False)
+highest_install_by_cat = games.groupby('category')['installs'].sum().sort_values(ascending=False).reset_index()
 #print(highest_install_by_cat)
 
 # RANKING THE GAMES BY THEIR PRICE
@@ -47,3 +49,26 @@ highest_price = games.sort_values(by='price' , ascending=False)
 
 highest_reviews = games.sort_values(by='total ratings' ,  ascending=False)
 print(highest_reviews[['title','total ratings']].head())
+
+# PLOTTING THE ANALYSIS WE PERFORMED
+
+highest_install_by_cat['installs_millions'] = highest_install_by_cat['installs'] / 1_000_000
+
+plt.figure(figsize=(9,6))
+sns.barplot(x='installs_millions', y='category', data=highest_install_by_cat, palette='viridis')
+plt.title("Ranking Game Categories by Total Installs")
+plt.xlabel("Total Installs")
+plt.ylabel("Game Category")
+plt.tight_layout()
+plt.show()
+
+# MOST REVIEWD GAME CATEGORY 
+
+plt.figure(figsize=(10,6))
+sns.barplot(x="title" , y="total ratings" , data=highest_reviews.head(5) , palette="viridis")
+plt.title("MOST REVIEWED GAMES BY CATEGORIES")
+plt.xlabel("TOTAL REVIEWS")
+plt.ylabel("GAME TITLE")
+plt.tight_layout()
+plt.xticks(rotation=10)
+plt.show()
