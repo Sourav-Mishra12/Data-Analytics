@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 games = pd.read_csv("android-games.csv")
 
-#print(games.columns)
+print(games.columns)
 #print(games.head())
 
 # WRITING A FUNCTION TO CONVERT THE INSTALLS VALUE FROM STRING TO NUMERIC
@@ -41,4 +41,9 @@ highest_install_by_cat = games.groupby('category')['installs'].sum().sort_values
 # RANKING THE GAMES BY THEIR PRICE
 
 highest_price = games.sort_values(by='price' , ascending=False)
-print(highest_price[['title','price']].head(5))
+#print(highest_price[['title','price']].head(5))
+
+# GAMES WITH THE HIGHEST REVIEWS
+
+highest_reviews = games.sort_values(by='total ratings' ,  ascending=False)
+print(highest_reviews[['title','total ratings']].head())
