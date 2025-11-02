@@ -5,7 +5,7 @@ import seaborn as sns
 
 games = pd.read_csv("android-games.csv")
 
-print(games.columns)
+#print(games.columns)
 #print(games.head())
 
 # WRITING A FUNCTION TO CONVERT THE INSTALLS VALUE FROM STRING TO NUMERIC
@@ -23,6 +23,7 @@ def convert_installs(value):
 
 games['installs'] = games['installs'].apply(convert_installs)
 
+games['category'] = games['category'].str.replace("GAME" , " " , case=False)  # CLEANED THE NAME OF THE CATEGORIES IN THE COLUMN 'CATEGORY'
 
 # CHECKING THE NULL VALUES
 
@@ -48,7 +49,7 @@ highest_price = games.sort_values(by='price' , ascending=False)
 # GAMES WITH THE HIGHEST REVIEWS
 
 highest_reviews = games.sort_values(by='total ratings' ,  ascending=False)
-print(highest_reviews[['title','total ratings']].head())
+#print(highest_reviews[['title','total ratings']].head())
 
 # PLOTTING THE ANALYSIS WE PERFORMED
 
@@ -60,7 +61,7 @@ plt.title("Ranking Game Categories by Total Installs")
 plt.xlabel("Total Installs")
 plt.ylabel("Game Category")
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 # MOST REVIEWD GAME CATEGORY 
 
@@ -71,4 +72,16 @@ plt.xlabel("TOTAL REVIEWS")
 plt.ylabel("GAME TITLE")
 plt.tight_layout()
 plt.xticks(rotation=10)
+#plt.show()
+
+
+# WHICH GAMES ARE PAID WHICH ARE NOT
+
+games['is_paid'] = games['price'] > 0
+sns.boxplot(x='is_paid', y='installs', data=games)
+plt.title("Free vs Paid Game Installs")
+plt.xlabel("Is Paid Game?")
+plt.ylabel("Installs")
 plt.show()
+
+
