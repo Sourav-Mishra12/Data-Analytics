@@ -61,7 +61,7 @@ plt.title("Ranking Game Categories by Total Installs")
 plt.xlabel("Total Installs")
 plt.ylabel("Game Category")
 plt.tight_layout()
-#plt.show()
+plt.show()
 
 # MOST REVIEWD GAME CATEGORY 
 
@@ -72,16 +72,37 @@ plt.xlabel("TOTAL REVIEWS")
 plt.ylabel("GAME TITLE")
 plt.tight_layout()
 plt.xticks(rotation=10)
-#plt.show()
-
-
-# WHICH GAMES ARE PAID WHICH ARE NOT
-
-games['is_paid'] = games['price'] > 0
-sns.boxplot(x='is_paid', y='installs', data=games)
-plt.title("Free vs Paid Game Installs")
-plt.xlabel("Is Paid Game?")
-plt.ylabel("Installs")
 plt.show()
 
 
+# 💵 ANALYSIS 3 — REVENUE & INSTALLS: FREE VS PAID
+games['is_paid'] = games['price'] > 0
+games['revenue'] = games['price'] * games['installs']
+
+# Average installs and revenue by game type
+avg_installs = games.groupby('is_paid', as_index=False)['installs'].mean()
+avg_revenue = games.groupby('is_paid', as_index=False)['revenue'].mean()
+
+# Convert revenue to millions for clarity
+avg_revenue['revenue'] = avg_revenue['revenue'] / 1_000_000
+
+# 📊 VISUALIZATION 3 — REVENUE: FREE VS PAID
+plt.figure(figsize=(7,5))
+sns.barplot(x='is_paid', y='revenue', data=avg_revenue, palette='magma')
+plt.title("Average Estimated Revenue: Free vs Paid Games")
+plt.xlabel("Game Type")
+plt.ylabel("Average Estimated Revenue (Millions USD)")
+plt.xticks([0, 1], ['Free', 'Paid'])
+plt.tight_layout()
+plt.show()
+
+
+
+# REVENUE PER CATEGORY
+
+games['revenue'] = games['price'] * games['installs']
+revenue_by_cat = games.groupby('category')['revenue'].sum().sort_values(ascending=False).reset_index()
+sns.barplot(x='revenue', y='category', data=revenue_by_cat, palette='cubehelix')
+plt.title("Estimated Revenue by Category")
+plt.tight_layout()
+plt.show()
