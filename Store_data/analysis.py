@@ -1,6 +1,4 @@
 import pandas as pd 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 data = pd.read_csv("retail_sales_dataset.csv")
 
@@ -42,8 +40,31 @@ print(data.head())
 # most_sold_cat = data.groupby('Product Category')['Quantity'].sum().sort_values(ascending=False)
 # print(f" THE MOST SOLD CATEGORY : \n {most_sold_cat}")
 
-gender_sales = data.groupby('Gender')['Revenue'].sum().sort_values(ascending=False)
-print(f" HOW MUCH EACH GENDER SPENDS : {gender_sales}")    # females tend to spend more 
+# gender_sales = data.groupby('Gender')['Revenue'].sum().sort_values(ascending=False)
+# print(f" HOW MUCH EACH GENDER SPENDS : {gender_sales}")    # females tend to spend more 
 
-avg_gender_sales = data.groupby('Gender')['Revenue'].mean()
-print("THE AVERAGE SPENDINGS BY EACH GENDER : " , avg_gender_sales)
+# avg_gender_sales = data.groupby('Gender')['Revenue'].mean()
+# print("THE AVERAGE SPENDINGS BY EACH GENDER : " , avg_gender_sales)
+
+female_data = data.loc[data['Gender'] == 'Female']
+
+female_sales_data = (
+    female_data.groupby('Product Category').agg(total_revenue = ('Revenue' , 'sum')).sort_values(by= 'total_revenue',ascending=False)
+)
+print(female_sales_data)
+
+top_female_category = female_sales_data.index[0]
+print(f"THE MOST SPENT CATEGORY BY FEMALE : {top_female_category}")   # the females are spending more on the clothing category
+
+
+
+male_data = data.loc[data['Gender'] == 'Male']
+
+male_sales_data = (
+    male_data.groupby('Product Category').agg(total_revenue = ('Revenue' , 'sum')).sort_values(by= 'total_revenue',ascending=False)
+)
+print(male_sales_data)
+
+top_male_category = male_sales_data.index[0]
+print(f"THE MOST SPENT CATEGORY BY FEMALE : {top_male_category}")   
+
